@@ -31,6 +31,12 @@ const users = {
 };
 
 /**
+ * Observable
+ *
+ * Observables are lazy Push collections of multiple values.
+ */
+
+/**
  * Create an observable
  *
  * @param {Function} subscribe
@@ -38,7 +44,7 @@ const users = {
  */
 
 const observable = new Observable((subscriber) => {
-  // Emit a value
+  // Emit/push a value/object when subscribed
   subscriber.next(users); // value emitted to the observer
 }).pipe(
   // First map operator to get the data from the object
@@ -57,22 +63,25 @@ const observable = new Observable((subscriber) => {
   map((value) => {
     console.log('3) Got data from first operator', value);
     return value.reduce((sum, user) => {
-      return sum + user.age;
+      return sum + user.age / value.length;
     }, 0);
   }),
 
   // Fourth map operator to throw an error if the age is less than 18
   map((value) => {
     console.log('4) Got data from third operator', value);
-    if (value < 115) {
-      throw new Error('Age is less than 18');
+    if (value < 28) {
+      throw new Error('Average age is less than 18');
     }
     return value;
   })
 );
 
-// Create an observer to handle the emitted values
-const observer = {
+/**
+ * To invoke the Observable and see these values,
+ * we need to subscribe to it:
+ */
+observable.subscribe({
   next: (value) => {
     // Handle the emitted value
     console.log('Observer got a value of ', value);
@@ -85,7 +94,4 @@ const observer = {
   complete: () => {
     console.log('Observer got a complete notification');
   },
-};
-
-// Subscribe to the observable
-observable.subscribe(observer);
+});
