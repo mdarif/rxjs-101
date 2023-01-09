@@ -1,5 +1,4 @@
-const { Observable } = require('rxjs');
-const { map } = require('rxjs/operators');
+const { Observable, map, tap, take } = require('rxjs');
 
 const users = {
   data: [
@@ -53,7 +52,18 @@ const observable = new Observable((subscriber) => {
   subscriber.next(users); // value emitted to the observer
   subscriber.complete(); // complete notification sent to the observer
 }).pipe(
-  // First map operator to get the data from the object
+  /**
+   * map
+   *
+   * map is a transformation operator that takes a function as an argument.
+   *
+   * Applies a given project function to each value emitted by the source Observable,
+   * and emits the resulting values as an Observable.
+   *
+   * Subscribe to its input Observable
+   * Creates an output Observable
+   *
+   */
   map((value) => {
     console.log('1) Got data from observable', value);
     return value.data;
