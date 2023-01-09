@@ -34,6 +34,11 @@ const users = {
  * Observable
  *
  * Observables are lazy Push collections of multiple values.
+ * A collection of items emitted over time.
+ * An Observable is a producer of multiple values over time.
+ * Observables are declarative—that is, you define a function for
+ * producing the sequence of values, but it is not executed until
+ * a consumer subscribes to it.
  */
 
 /**
@@ -46,6 +51,7 @@ const users = {
 const observable = new Observable((subscriber) => {
   // Emit/push a value/object when subscribed
   subscriber.next(users); // value emitted to the observer
+  subscriber.complete(); // complete notification sent to the observer
 }).pipe(
   // First map operator to get the data from the object
   map((value) => {
@@ -78,10 +84,11 @@ const observable = new Observable((subscriber) => {
 );
 
 /**
+ *
  * To invoke the Observable and see these values,
  * we need to subscribe to it:
  */
-observable.subscribe({
+const observer = {
   next: (value) => {
     // Handle the emitted value
     console.log('Observer got a value of ', value);
@@ -92,6 +99,17 @@ observable.subscribe({
   },
   // Handle completion
   complete: () => {
-    console.log('Observer got a complete notification');
+    console.log('Observer got a complete notification!');
   },
-});
+};
+/**
+ * observable.subscribe(Observer)
+ *
+ * Argument (Observer)
+ *
+ * What is an Observer?
+ * An Observer is a consumer of values delivered by an Observable.
+ * Observers are simply a set of callbacks, one for each type of notification
+ * delivered by the Observable: 'next', 'error', and 'complete'.
+ */
+observable.subscribe(observer);
